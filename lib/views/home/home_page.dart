@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hadir/app/styles/color.dart';
 import 'package:hadir/models/dummies.dart';
+import 'package:hadir/views/home/geotag_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -38,7 +40,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Tambah lokasi baru',
-        onPressed: () {},
+        onPressed: () {
+          Get.to(const GeoTagPage());
+        },
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
