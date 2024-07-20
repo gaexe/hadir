@@ -42,22 +42,43 @@ class _GeoTagPage extends State<StatefulWidget> {
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 82, right: 58, left: 58),
-            child: TextFormField(
-              onChanged: (value) {},
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                hintText: 'Nama Lokasi',
-                hintStyle: const TextStyle(
-                  fontSize: 15.0,
-                  color: Color(0xffA9A9A9),
-                  fontWeight: FontWeight.w500,
+          Container(
+            height: 70,
+            margin: const EdgeInsets.symmetric(vertical: 62, horizontal: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(32.0),
+              color: Colors.white,
+            ),
+            child: ListTile(
+              leading: InkWell(
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 4),
+                  child: Icon(Icons.arrow_back, size: 28),
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 24),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
+                onTap: () => Get.back(),
+              ),
+              trailing: const InkWell(
+                child: Icon(Icons.save),
+              ),
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: TextFormField(
+                  onChanged: (value) {},
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    hintText: 'Nama Lokasi',
+                    hintStyle: const TextStyle(
+                      fontSize: 15.0,
+                      color: Color(0xffA9A9A9),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 24),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -82,22 +103,8 @@ class _GeoTagPage extends State<StatefulWidget> {
                     child: const Icon(Icons.radio_button_checked),
                   ),
                 ),
-                const SizedBox(height: 100),
+                const SizedBox(height: 12),
               ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 24, bottom: 32),
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  Get.back();
-                  _controller.dispose();
-                },
-                label: const Text('SIMPAN'),
-                icon: const Icon(Icons.pin_drop_outlined),
-              ),
             ),
           ),
         ],
