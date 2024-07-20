@@ -3,7 +3,6 @@
 //     final modelLocation = modelLocationFromJson(jsonString);
 
 import 'dart:convert';
-import 'dart:ffi';
 
 ModelLocation modelLocationFromJson(String str) => ModelLocation.fromJson(json.decode(str));
 
@@ -13,13 +12,15 @@ class ModelLocation {
   String name;
   String latitude;
   String longitude;
-  String radius;
+  int radius;
+  String address;
 
   ModelLocation({
     required this.name,
     required this.latitude,
     required this.longitude,
     required this.radius,
+    required this.address,
   });
 
   factory ModelLocation.fromJson(Map<String, dynamic> json) => ModelLocation(
@@ -27,6 +28,7 @@ class ModelLocation {
         latitude: json["latitude"],
         longitude: json["longitude"],
         radius: json["radius"],
+        address: json["address"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,5 +36,6 @@ class ModelLocation {
         "latitude": latitude,
         "longitude": longitude,
         "radius": radius,
+        "address": address,
       };
 }

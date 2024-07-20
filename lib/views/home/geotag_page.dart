@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hadir/app/helper/common.dart';
+import 'package:hadir/models/model_location.dart';
 
 import '../../controllers/geotag_controller.dart';
 
@@ -20,6 +21,7 @@ class _GeoTagPage extends State<StatefulWidget> {
   late GeotagController _geotagCtrl;
   var camZoom = 5.0;
   var address = "";
+  final defaultRadius = 50; //in meter
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _GeoTagPage extends State<StatefulWidget> {
         });
       }
       _geotagCtrl.getMarkerPosition();
+
       return Scaffold(
         body: Stack(
           children: [
@@ -78,12 +81,37 @@ class _GeoTagPage extends State<StatefulWidget> {
                   ),
                   onTap: () => Get.back(),
                 ),
-                trailing: const InkWell(
-                  child: Icon(Icons.save),
+                trailing: InkWell(
+                  child: const Icon(Icons.save),
+                  onTap: () async {
+                    if (_geotagCtrl.name.value.value.text.isNotEmpty && address.isNotEmpty) {
+                      final response = await _geotagCtrl.newLocation(
+                        ModelLocation(
+                          name: _geotagCtrl.name.value.value.text,
+                          latitude: ord.latitude.toString(),
+                          longitude: ord.longitude.toString(),
+                          radius: defaultRadius,
+                          address: address,
+                        ),
+                      );
+                      Get.snackbar(
+                        response.name != null ? "Sukses" : "Gagal",
+                        response.name != null ? "ID ${response.name}" : "Error ${response.error}",
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    } else {
+                      Get.snackbar(
+                        "Validator",
+                        "Nama lokasi tidak boleh kosong!",
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    }
+                  },
                 ),
                 title: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: TextFormField(
+                    controller: _geotagCtrl.name.value,
                     onChanged: (value) {},
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
@@ -104,42 +132,42 @@ class _GeoTagPage extends State<StatefulWidget> {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 24, bottom: 32),
-                    child: FloatingActionButton(
-                      onPressed: () {},
-                      child: const Icon(Icons.api),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 24, bottom: 82),
-                    child: FloatingActionButton(
-                      onPressed: () {},
-                      child: const Icon(Icons.radio_button_checked),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 42,
-                width: double.infinity,
-                color: Colors.white70,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(address),
-                ),
-              ),
-            ),
+            // Align(
+            //   alignment: Alignment.bottomRight,
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.center,
+            //     mainAxisAlignment: MainAxisAlignment.end,
+            //     children: [
+            //       Padding(
+            //         padding: const EdgeInsets.only(right: 24, bottom: 32),
+            //         child: FloatingActionButton(
+            //           onPressed: () {},
+            //           child: const Icon(Icons.api),
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(right: 24, bottom: 82),
+            //         child: FloatingActionButton(
+            //           onPressed: () {},
+            //           child: const Icon(Icons.radio_button_checked),
+            //         ),
+            //       ),
+            //       const SizedBox(height: 12),
+            //     ],
+            //   ),
+            // ),
+            // Align(
+            //   alignment: Alignment.bottomCenter,
+            //   child: Container(
+            //     height: 42,
+            //     width: double.infinity,
+            //     color: Colors.white70,
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(12),
+            //       child: Text(address),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       );

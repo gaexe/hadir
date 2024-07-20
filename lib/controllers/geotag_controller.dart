@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hadir/models/model_ordinate.dart';
+import 'package:hadir/models/response_default.dart';
 import 'package:location/location.dart';
 
+import '../app/repository/remote/api_config.dart';
+import '../app/repository/repository.dart';
+import '../models/model_location.dart';
+
 class GeotagController extends GetxController {
+  /// protocol
+  final _remote = Repository(apiConfig: ApiConfig());
+
+  /// common
   Location location = Location();
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
@@ -16,6 +25,9 @@ class GeotagController extends GetxController {
   var camZoom = 15.0;
   final ordinate = ModelOrdinate().obs;
   final address = "".obs;
+  final name = TextEditingController(text: '').obs;
+
+  Future<ResponseDefault> newLocation(ModelLocation payload) => _remote.postLogin(payload);
 
   enableService() async {
     _serviceEnabled = await location.serviceEnabled();
