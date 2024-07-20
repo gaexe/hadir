@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hadir/models/model_ordinate.dart';
@@ -25,6 +26,7 @@ class GeotagController extends GetxController {
 
   final latitudeDefault = -2.4152971; //default location Indonesia
   final longitudeDefault = 108.8471018; //default location Indonesia
+  final isMyPositionValid = false.obs;
 
   var camZoom = 5.0.obs;
   final ordinate = ModelOrdinate().obs;
@@ -71,6 +73,17 @@ class GeotagController extends GetxController {
 
   initMarkerIam() async {
     _iconIam = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), "assets/images/ic_my_position.png");
+  }
+
+  runValidator() {
+    final latStatic = selectedOrdinate.value.latitude;
+    final lgtStatic = selectedOrdinate.value.longitude;
+    final latDynamic = ordinate.value.latitude;
+    final lgtDynamic = ordinate.value.longitude;
+    if (latStatic != null && lgtStatic != null && latDynamic != null && lgtDynamic != null) {
+      double distance = Geolocator.distanceBetween(latStatic, lgtStatic, latDynamic, lgtDynamic);
+      isMyPositionValid.value = distance <= 50; //SOP soal ujian
+    }
   }
 
   CameraPosition getCameraPosition() {

@@ -5,4 +5,5 @@ class MyCommon {
     final place = await placemarkFromCoordinates(latitude, longitude);
     return "${place.first.street}, ${place.first.name}, ${place.first.subLocality}, ${place.first.locality}, ${place.first.postalCode}";
   }
+
 }

@@ -59,6 +59,8 @@ class _VisitPage extends State<StatefulWidget> {
         _controller.animateCamera(CameraUpdate.newCameraPosition(_geotagCtrl.getCameraPosition()));
       });
 
+      _geotagCtrl.runValidator();
+
       return Scaffold(
         body: Stack(
           children: [
@@ -80,7 +82,7 @@ class _VisitPage extends State<StatefulWidget> {
                         circleId: const CircleId('mrk_location'),
                         center: LatLng(_geotagCtrl.selectedOrdinate.value.latitude!, _geotagCtrl.selectedOrdinate.value.longitude!),
                         radius: defaultRadius.toDouble(),
-                        fillColor: MyColors.redBackground,
+                        fillColor: _geotagCtrl.isMyPositionValid.value ? MyColors.greenBackground : MyColors.redBackground,
                         strokeColor: Colors.transparent,
                       )
                     : const Circle(circleId: CircleId('mrk_location'))
