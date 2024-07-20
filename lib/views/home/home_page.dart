@@ -52,7 +52,7 @@ class _HomePage extends State<HomePage> {
                     child: Card(
                       child: ListTile(
                         title: Text(e.name),
-                        subtitle: Text("${e.radius} m"),
+                        subtitle: Text("${e.time}, ${e.address}"),
                       ),
                     ),
                   );
