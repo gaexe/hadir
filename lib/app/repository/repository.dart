@@ -17,4 +17,12 @@ class Repository {
   Future<List<Location>> getLocations() async {
     return await apiConfig.getCase(Endpoints.location, null);
   }
+
+  Future<ResponseDefault> postNewAttendance(ModelLocation payload) async {
+    return await apiConfig.postCase(Endpoints.attendance, payload.toJson());
+  }
+
+  Future<List<Location>> getAttendance() async {
+    return await apiConfig.getCase(Endpoints.attendance, null);
+  }
 }

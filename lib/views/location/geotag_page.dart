@@ -80,7 +80,7 @@ class _GeoTagPage extends State<StatefulWidget> {
                 leading: InkWell(
                   child: const Padding(
                     padding: EdgeInsets.only(left: 4),
-                    child: Icon(Icons.arrow_back, size: 28),
+                    child: Icon(Icons.arrow_back, size: 24),
                   ),
                   onTap: () => Get.back(),
                 ),

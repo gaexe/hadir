@@ -32,43 +32,60 @@ class _HomePage extends State<HomePage> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(12),
-          children: [
-            ..._locationCtrl.locations.value.map((e) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Card(
-                  child: ListTile(
-                    title: Text(e.name),
-                    subtitle: Text("${e.radius} m"),
-                  ),
-                ),
-              );
-            }),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.dialog(dialogOption());
+              },
+              child: const Icon(Icons.more_vert),
+            )
           ],
         ),
-        floatingActionButton: Row(
+        body: Stack(
           children: [
-            FloatingActionButton(
-              tooltip: 'Tambah lokasi baru',
-              onPressed: () {
-                Get.to(const LocationPage(title: "Hadir"));
-              },
-              child: const Icon(Icons.map),
-            ),
-            const SizedBox(width: 24),
-            FloatingActionButton(
-              tooltip: 'Tambah lokasi baru',
-              onPressed: () {
-                Get.to(const VisitPage());
-              },
-              child: const Icon(Icons.pin_drop_sharp),
+            ListView(
+              padding: const EdgeInsets.all(12),
+              children: [
+                ..._locationCtrl.attendance.value.map((e) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Card(
+                      child: ListTile(
+                        title: Text(e.name),
+                        subtitle: Text("${e.radius} m"),
+                      ),
+                    ),
+                  );
+                }),
+              ],
             ),
           ],
         ),
       );
     });
+  }
+
+  Widget dialogOption() {
+    return SimpleDialog(
+      title: const Text('Menu Utama'),
+      children: <Widget>[
+        SimpleDialogOption(
+          onPressed: () {
+            Get.to(const LocationPage(title: "Kehadiran"))?.then((value) {
+              Get.back(); //dismiss dialog
+            });
+          },
+          child: const Text('Setup Lokasi'),
+        ),
+        SimpleDialogOption(
+          onPressed: () {
+            Get.to(const VisitPage())?.then((value) {
+              Get.back(); //dismiss dialog
+            });
+          },
+          child: const Text('Kehadiran'),
+        ),
+      ],
+    );
   }
 }

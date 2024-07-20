@@ -4,4 +4,5 @@ class Endpoints {
 
   //END POINTS
   static const location = "/locations.json";
+  static const attendance = "/attendance.json";
 }

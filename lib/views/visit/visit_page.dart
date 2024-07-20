@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hadir/app/helper/common.dart';
 import 'package:hadir/app/styles/color.dart';
 import 'package:hadir/controllers/location_controller.dart';
+import 'package:hadir/models/model_location.dart';
 import 'package:hadir/models/model_ordinate.dart';
 
 import '../../controllers/geotag_controller.dart';
@@ -99,7 +100,7 @@ class _VisitPage extends State<StatefulWidget> {
                 leading: InkWell(
                   child: const Padding(
                     padding: EdgeInsets.only(left: 4),
-                    child: Icon(Icons.arrow_back, size: 28),
+                    child: Icon(Icons.arrow_back, size: 24),
                   ),
                   onTap: () => Get.back(),
                 ),
@@ -110,7 +111,6 @@ class _VisitPage extends State<StatefulWidget> {
                     controller: _geotagCtrl.name.value,
                     onChanged: (value) {},
                     readOnly: true,
-                    textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       suffixIcon: const Icon(Icons.arrow_drop_down_outlined),
                       fillColor: Colors.white,
@@ -132,20 +132,30 @@ class _VisitPage extends State<StatefulWidget> {
             ),
             Align(
               alignment: Alignment.bottomRight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 24, bottom: 82),
+              child: Padding(
+                  padding: const EdgeInsets.only(right: 24, bottom: 82),
+                  child: Visibility(
+                    visible: _geotagCtrl.isMyPositionValid.value,
                     child: FloatingActionButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final response = await _geotagCtrl.newAttendance(
+                          ModelLocation(
+                            name: "Hadir!",
+                            latitude: ord.latitude.toString(),
+                            longitude: ord.longitude.toString(),
+                            radius: defaultRadius,
+                            address: address,
+                          ),
+                        );
+                        Get.snackbar(
+                          response.name != null ? "Sukses" : "Gagal",
+                          response.name != null ? "ID ${response.name}" : "Error ${response.error}",
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                      },
                       child: const Icon(Icons.pin_drop_sharp),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                ],
-              ),
+                  )),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -190,7 +200,7 @@ class _VisitPage extends State<StatefulWidget> {
                         title: Text(e.name),
                         subtitle: Text("${e.radius} m"),
                         onTap: () {
-                          _geotagCtrl.name.value.text = e.name;
+                          _geotagCtrl.name.value.text = "${e.name}, radius:${e.radius}m";
                           _geotagCtrl.setSelectedLocation(
                             ModelOrdinate(
                               latitude: double.parse(e.latitude),
