@@ -145,6 +145,7 @@ class _VisitPage extends State<StatefulWidget> {
                             longitude: ord.longitude.toString(),
                             radius: defaultRadius,
                             address: address,
+                            time: MyCommon.dateNowDisplay(),
                           ),
                         );
                         Get.snackbar(

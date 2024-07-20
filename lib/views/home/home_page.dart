@@ -20,7 +20,7 @@ class _HomePage extends State<HomePage> {
   @override
   void initState() {
     _locationCtrl = Get.put(LocationController());
-    _locationCtrl.fetchLocations();
+    _locationCtrl.fetchAttendance();
     super.initState();
   }
 

@@ -5,6 +5,7 @@ class Location {
   final String longitude;
   final String name;
   final int radius;
+  final String? time;
 
   Location({
     required this.id,
@@ -13,6 +14,7 @@ class Location {
     required this.longitude,
     required this.name,
     required this.radius,
+    this.time,
   });
 
   factory Location.fromJson(String id, Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Location {
       longitude: json['longitude'],
       name: json['name'],
       radius: json['radius'],
+      time: json['time'],
     );
   }
 }

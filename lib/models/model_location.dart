@@ -14,6 +14,7 @@ class ModelLocation {
   String longitude;
   int radius;
   String address;
+  String? time;
 
   ModelLocation({
     required this.name,
@@ -21,6 +22,7 @@ class ModelLocation {
     required this.longitude,
     required this.radius,
     required this.address,
+    this.time,
   });
 
   factory ModelLocation.fromJson(Map<String, dynamic> json) => ModelLocation(
@@ -29,6 +31,7 @@ class ModelLocation {
         longitude: json["longitude"],
         radius: json["radius"],
         address: json["address"],
+        time: json["time"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -37,5 +40,6 @@ class ModelLocation {
         "longitude": longitude,
         "radius": radius,
         "address": address,
+        "time": time,
       };
 }

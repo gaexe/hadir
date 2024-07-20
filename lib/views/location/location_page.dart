@@ -41,7 +41,7 @@ class _LocationPage extends State<LocationPage> {
                 child: Card(
                   child: ListTile(
                     title: Text(e.name),
-                    subtitle: Text("${e.radius} m"),
+                    subtitle: Text(e.address),
                   ),
                 ),
               );
