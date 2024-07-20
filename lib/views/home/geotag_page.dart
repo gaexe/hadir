@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hadir/app/helper/common.dart';
 
 import '../../controllers/geotag_controller.dart';
 
@@ -18,6 +19,7 @@ class _GeoTagPage extends State<StatefulWidget> {
   late GoogleMapController _controller;
   late GeotagController _geotagCtrl;
   var camZoom = 5.0;
+  var address = "";
 
   @override
   void initState() {
@@ -39,6 +41,11 @@ class _GeoTagPage extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     return Obx(() {
       final ord = _geotagCtrl.ordinate.value;
+      if (ord.latitude != null && ord.longitude != null) {
+        MyCommon.getAddress(ord.latitude!, ord.longitude!).then((adr) {
+          address = adr;
+        });
+      }
       _geotagCtrl.getMarkerPosition();
       return Scaffold(
         body: Stack(
@@ -123,7 +130,15 @@ class _GeoTagPage extends State<StatefulWidget> {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Text(ord.latitude.toString()),
+              child: Container(
+                height: 42,
+                width: double.infinity,
+                color: Colors.white70,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(address),
+                ),
+              ),
             ),
           ],
         ),

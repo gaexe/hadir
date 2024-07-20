@@ -15,6 +15,7 @@ class GeotagController extends GetxController {
   var _iconMarker = BitmapDescriptor.defaultMarker;
   var camZoom = 15.0;
   final ordinate = ModelOrdinate().obs;
+  final address = "".obs;
 
   enableService() async {
     _serviceEnabled = await location.serviceEnabled();
