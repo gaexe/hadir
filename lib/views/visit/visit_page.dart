@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hadir/app/helper/common.dart';
 import 'package:hadir/controllers/location_controller.dart';
+import 'package:hadir/models/model_ordinate.dart';
 
 import '../../controllers/geotag_controller.dart';
 
@@ -20,7 +21,6 @@ class _VisitPage extends State<StatefulWidget> {
   late GoogleMapController _controller;
   late GeotagController _geotagCtrl;
   late LocationController _locationCtrl;
-  var camZoom = 5.0;
   var address = "";
   final defaultRadius = 50; //in meter
 
@@ -32,7 +32,8 @@ class _VisitPage extends State<StatefulWidget> {
     _geotagCtrl.enableService();
     _geotagCtrl.checkPermission();
     _geotagCtrl.fetchLocation();
-    _geotagCtrl.initMarker();
+    _geotagCtrl.initMarkerLocation();
+    _geotagCtrl.initMarkerIam();
     super.initState();
   }
 
@@ -51,7 +52,11 @@ class _VisitPage extends State<StatefulWidget> {
           address = adr;
         });
       }
-      _geotagCtrl.getMarkerPosition();
+      _geotagCtrl.getMarkerIam();
+      _mapController.future.then((value) {
+        _controller = value;
+        _controller.animateCamera(CameraUpdate.newCameraPosition(_geotagCtrl.getCameraPosition()));
+      });
 
       return Scaffold(
         body: Stack(
@@ -60,7 +65,7 @@ class _VisitPage extends State<StatefulWidget> {
               mapType: MapType.normal,
               initialCameraPosition: CameraPosition(
                 target: LatLng(_geotagCtrl.latitudeDefault, _geotagCtrl.longitudeDefault),
-                zoom: camZoom,
+                zoom: _geotagCtrl.camZoom.value,
               ),
               onMapCreated: (GoogleMapController controller) {
                 _mapController.complete(controller);
@@ -172,6 +177,13 @@ class _VisitPage extends State<StatefulWidget> {
                         subtitle: Text("${e.radius} m"),
                         onTap: () {
                           _geotagCtrl.name.value.text = e.name;
+                          _geotagCtrl.setSelectedLocation(
+                            ModelOrdinate(
+                              latitude: double.parse(e.latitude),
+                              longitude: double.parse(e.longitude),
+                            ),
+                          );
+                          _geotagCtrl.getMarkerLocation(true);
                           Get.back();
                         },
                       ),

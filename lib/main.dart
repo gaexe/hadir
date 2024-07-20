@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hadir/views/visit/visit_page.dart';
-
-import 'views/location/location_page.dart';
+import 'package:hadir/views/home/home_page.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const VisitPage(),
+      home: const HomePage(title: "Hadir"),
     );
   }
 }

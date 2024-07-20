@@ -18,12 +18,17 @@ class GeotagController extends GetxController {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   final markers = <MarkerId, Marker>{};
-  static const _markerId = MarkerId('hadirin');
+  static const _markerLocation = MarkerId('mrk_location');
+  static const _markerIam = MarkerId('mrk_iam');
+  var _iconLocation = BitmapDescriptor.defaultMarker;
+  var _iconIam = BitmapDescriptor.defaultMarker;
+
   final latitudeDefault = -2.4152971; //default location Indonesia
   final longitudeDefault = 108.8471018; //default location Indonesia
-  var _iconMarker = BitmapDescriptor.defaultMarker;
-  var camZoom = 15.0;
+
+  var camZoom = 5.0.obs;
   final ordinate = ModelOrdinate().obs;
+  final selectedOrdinate = ModelOrdinate().obs;
   final address = "".obs;
   final name = TextEditingController(text: '').obs;
 
@@ -57,20 +62,49 @@ class GeotagController extends GetxController {
         longitude: currentLocation.longitude,
       );
     });
+    camZoom.value = 18;
   }
 
-  initMarker() async {
-    _iconMarker = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), "assets/images/ic_pin_android.png");
+  initMarkerLocation() async {
+    _iconLocation = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), "assets/images/ic_pin_android.png");
   }
 
-  getMarkerPosition() {
+  initMarkerIam() async {
+    _iconIam = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), "assets/images/ic_my_position.png");
+  }
+
+  CameraPosition getCameraPosition() {
     final ord = ordinate.value;
-    final marker = Marker(
-      markerId: _markerId,
+    return CameraPosition(
+      target:
+          (ord.latitude != null && ord.longitude != null) ? LatLng(ord.latitude!, ord.longitude!) : LatLng(latitudeDefault, longitudeDefault),
+      zoom: camZoom.value,
+    );
+  }
+
+  setSelectedLocation(ModelOrdinate ordinateLocation) {
+    selectedOrdinate.value = ordinateLocation;
+  }
+
+  getMarkerLocation(bool isStatic) {
+    final ord = isStatic ? selectedOrdinate.value : ordinate.value;
+    final markerLocation = Marker(
+      markerId: _markerLocation,
       position:
           (ord.latitude != null && ord.longitude != null) ? LatLng(ord.latitude!, ord.longitude!) : LatLng(latitudeDefault, longitudeDefault),
-      icon: _iconMarker,
+      icon: _iconLocation,
     );
-    markers[_markerId] = marker;
+    markers[_markerLocation] = markerLocation;
+  }
+
+  getMarkerIam() {
+    final ord = ordinate.value;
+    final markerIam = Marker(
+      markerId: _markerIam,
+      position:
+          (ord.latitude != null && ord.longitude != null) ? LatLng(ord.latitude!, ord.longitude!) : LatLng(latitudeDefault, longitudeDefault),
+      icon: _iconIam,
+    );
+    markers[_markerIam] = markerIam;
   }
 }

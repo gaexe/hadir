@@ -19,7 +19,6 @@ class _GeoTagPage extends State<StatefulWidget> {
   final Completer<GoogleMapController> _mapController = Completer();
   late GoogleMapController _controller;
   late GeotagController _geotagCtrl;
-  var camZoom = 5.0;
   var address = "";
   final defaultRadius = 50; //in meter
 
@@ -29,7 +28,7 @@ class _GeoTagPage extends State<StatefulWidget> {
     _geotagCtrl.enableService();
     _geotagCtrl.checkPermission();
     _geotagCtrl.fetchLocation();
-    _geotagCtrl.initMarker();
+    _geotagCtrl.initMarkerLocation();
     super.initState();
   }
 
@@ -48,7 +47,11 @@ class _GeoTagPage extends State<StatefulWidget> {
           address = adr;
         });
       }
-      _geotagCtrl.getMarkerPosition();
+      _geotagCtrl.getMarkerLocation(false);
+      _mapController.future.then((value) {
+        _controller = value;
+        _controller.animateCamera(CameraUpdate.newCameraPosition(_geotagCtrl.getCameraPosition()));
+      });
 
       return Scaffold(
         body: Stack(
@@ -57,7 +60,7 @@ class _GeoTagPage extends State<StatefulWidget> {
               mapType: MapType.normal,
               initialCameraPosition: CameraPosition(
                 target: LatLng(_geotagCtrl.latitudeDefault, _geotagCtrl.longitudeDefault),
-                zoom: camZoom,
+                zoom: _geotagCtrl.camZoom.value,
               ),
               onMapCreated: (GoogleMapController controller) {
                 _mapController.complete(controller);
