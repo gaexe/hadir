@@ -8,4 +8,5 @@ class MyCommon {
   }
 
   static String dateNowDisplay() => DateFormat('E, dd MMM yyyy HH:mm').format(DateTime.now());
+
 }

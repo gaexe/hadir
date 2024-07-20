@@ -18,6 +18,7 @@ class GeotagController extends GetxController {
   Location location = Location();
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
+  late LocationPermission _permissionLocation;
   final markers = <MarkerId, Marker>{};
   static const _markerLocation = MarkerId('mrk_location');
   static const _markerIam = MarkerId('mrk_iam');
@@ -35,6 +36,7 @@ class GeotagController extends GetxController {
   final name = TextEditingController(text: '').obs;
 
   Future<ResponseDefault> newLocation(ModelLocation payload) => _remote.postNewLocation(payload);
+
   Future<ResponseDefault> newAttendance(ModelLocation payload) => _remote.postNewAttendance(payload);
 
   enableService() async {
@@ -49,10 +51,19 @@ class GeotagController extends GetxController {
 
   checkPermission() async {
     _permissionGranted = await location.hasPermission();
+    _permissionLocation = await Geolocator.checkPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
         return;
+      }
+    }
+
+    if (_permissionLocation == LocationPermission.denied) {
+      _permissionLocation = await Geolocator.requestPermission();
+      if (_permissionLocation == LocationPermission.deniedForever) {
+        Geolocator.openAppSettings();
+        Get.snackbar("Location Permission", "Mohon aktifkan izin lokasi!");
       }
     }
   }
