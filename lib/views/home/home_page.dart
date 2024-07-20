@@ -71,7 +71,7 @@ class _HomePage extends State<HomePage> {
       children: <Widget>[
         SimpleDialogOption(
           onPressed: () {
-            Get.to(const LocationPage(title: "Kehadiran"))?.then((value) {
+            Get.to(const LocationPage(title: "Setup Lokasi"))?.then((value) {
               Get.back(); //dismiss dialog
             });
           },
