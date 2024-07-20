@@ -3,6 +3,7 @@
 //     final modelLocation = modelLocationFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:ffi';
 
 ModelLocation modelLocationFromJson(String str) => ModelLocation.fromJson(json.decode(str));
 
