@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hadir/app/helper/common.dart';
+import 'package:hadir/app/styles/color.dart';
 import 'package:hadir/controllers/location_controller.dart';
 import 'package:hadir/models/model_ordinate.dart';
 
@@ -73,6 +74,17 @@ class _VisitPage extends State<StatefulWidget> {
               myLocationButtonEnabled: false,
               zoomControlsEnabled: false,
               markers: Set<Marker>.of(_geotagCtrl.markers.values),
+              circles: {
+                _geotagCtrl.selectedOrdinate.value.latitude != null
+                    ? Circle(
+                        circleId: const CircleId('mrk_location'),
+                        center: LatLng(_geotagCtrl.selectedOrdinate.value.latitude!, _geotagCtrl.selectedOrdinate.value.longitude!),
+                        radius: defaultRadius.toDouble(),
+                        fillColor: MyColors.redBackground,
+                        strokeColor: Colors.transparent,
+                      )
+                    : const Circle(circleId: CircleId('mrk_location'))
+              },
             ),
             Container(
               height: 70,
