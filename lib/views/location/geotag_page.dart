@@ -156,18 +156,18 @@ class _GeoTagPage extends State<StatefulWidget> {
             //     ],
             //   ),
             // ),
-            // Align(
-            //   alignment: Alignment.bottomCenter,
-            //   child: Container(
-            //     height: 42,
-            //     width: double.infinity,
-            //     color: Colors.white70,
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(12),
-            //       child: Text(address),
-            //     ),
-            //   ),
-            // ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 42,
+                width: double.infinity,
+                color: Colors.white70,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(address),
+                ),
+              ),
+            ),
           ],
         ),
       );

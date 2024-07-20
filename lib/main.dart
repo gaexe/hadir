@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'views/home/home_page.dart';
+import 'views/location/location_page.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Hadir App'),
+      home: const LocationPage(title: 'Setup Lokasi'),
     );
   }
 }

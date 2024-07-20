@@ -27,7 +27,7 @@ class GeotagController extends GetxController {
   final address = "".obs;
   final name = TextEditingController(text: '').obs;
 
-  Future<ResponseDefault> newLocation(ModelLocation payload) => _remote.postLogin(payload);
+  Future<ResponseDefault> newLocation(ModelLocation payload) => _remote.postNewLocation(payload);
 
   enableService() async {
     _serviceEnabled = await location.serviceEnabled();
