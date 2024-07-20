@@ -80,6 +80,7 @@ class _HomePage extends State<HomePage> {
         SimpleDialogOption(
           onPressed: () {
             Get.to(const VisitPage())?.then((value) {
+              _locationCtrl.fetchAttendance();
               Get.back(); //dismiss dialog
             });
           },

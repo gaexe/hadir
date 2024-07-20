@@ -16,9 +16,6 @@ class GeotagController extends GetxController {
 
   /// common
   Location location = Location();
-  late bool _serviceEnabled;
-  late PermissionStatus _permissionGranted;
-  late LocationPermission _permissionLocation;
   final markers = <MarkerId, Marker>{};
   static const _markerLocation = MarkerId('mrk_location');
   static const _markerIam = MarkerId('mrk_iam');
@@ -40,31 +37,28 @@ class GeotagController extends GetxController {
   Future<ResponseDefault> newAttendance(ModelLocation payload) => _remote.postNewAttendance(payload);
 
   enableService() async {
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
+    var serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
         return;
       }
     }
   }
 
   checkPermission() async {
-    _permissionGranted = await location.hasPermission();
-    _permissionLocation = await Geolocator.checkPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    var permissionGranted = await location.hasPermission();
+    final permissionLocation = await Geolocator.checkPermission();
+
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
 
-    if (_permissionLocation == LocationPermission.denied) {
-      _permissionLocation = await Geolocator.requestPermission();
-      if (_permissionLocation == LocationPermission.deniedForever) {
-        Geolocator.openAppSettings();
-        Get.snackbar("Location Permission", "Mohon aktifkan izin lokasi!");
-      }
+    if (permissionLocation == LocationPermission.denied) {
+      Geolocator.requestPermission();
     }
   }
 
