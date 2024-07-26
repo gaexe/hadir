@@ -25,39 +25,40 @@ class _LocationPage extends State<LocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Scaffold(
-        backgroundColor: MyColors.greyBackground,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(12),
-          children: [
-            ..._locationCtrl.locations.value.map((e) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Card(
-                  child: ListTile(
-                    title: Text(e.name),
-                    subtitle: Text(e.address),
-                  ),
-                ),
-              );
-            }),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          tooltip: 'Tambah lokasi baru',
-          onPressed: () {
-            Get.to(const GeoTagPage())?.then((value) {
-              _locationCtrl.fetchLocations(); //refresh data
-            });
-          },
-          child: const Icon(Icons.add),
-        ), // This trailing comma makes auto-formatting nicer for build methods.
-      );
-    });
+
+    return Scaffold(
+      backgroundColor: MyColors.greyBackground,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: Obx(() {
+        return _locationCtrl.isLoadingLocation.value
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: _locationCtrl.locations.value.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Card(
+                      child: ListTile(
+                        title: Text(_locationCtrl.locations.value[index].name),
+                        subtitle: Text(_locationCtrl.locations.value[index].address),
+                      ),
+                    ),
+                  );
+                });
+      }),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Tambah lokasi baru',
+        onPressed: () {
+          Get.to(const GeoTagPage())?.then((value) {
+            _locationCtrl.fetchLocations(); //refresh data
+          });
+        },
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
   }
 }
