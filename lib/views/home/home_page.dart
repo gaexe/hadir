@@ -43,14 +43,14 @@ class _HomePage extends State<HomePage> {
             ? const Center(child: CircularProgressIndicator())
             : ListView.builder(
                 padding: const EdgeInsets.all(12),
-                itemCount: _locationCtrl.attendance.value.length,
+                itemCount: _locationCtrl.attendance.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Card(
                       child: ListTile(
-                        title: Text(_locationCtrl.attendance.value[index].name),
-                        subtitle: Text("${_locationCtrl.attendance.value[index].time}, ${_locationCtrl.attendance.value[index].address}"),
+                        title: Text(_locationCtrl.attendance[index].name),
+                        subtitle: Text("${_locationCtrl.attendance[index].time}, ${_locationCtrl.attendance[index].address}"),
                       ),
                     ),
                   );

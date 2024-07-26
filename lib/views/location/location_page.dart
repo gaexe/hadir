@@ -25,7 +25,6 @@ class _LocationPage extends State<LocationPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: MyColors.greyBackground,
       appBar: AppBar(
@@ -37,14 +36,14 @@ class _LocationPage extends State<LocationPage> {
             ? const Center(child: CircularProgressIndicator())
             : ListView.builder(
                 padding: const EdgeInsets.all(12),
-                itemCount: _locationCtrl.locations.value.length,
+                itemCount: _locationCtrl.locations.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Card(
                       child: ListTile(
-                        title: Text(_locationCtrl.locations.value[index].name),
-                        subtitle: Text(_locationCtrl.locations.value[index].address),
+                        title: Text(_locationCtrl.locations[index].name),
+                        subtitle: Text(_locationCtrl.locations[index].address),
                       ),
                     ),
                   );
