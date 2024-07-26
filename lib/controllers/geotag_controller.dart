@@ -6,6 +6,7 @@ import 'package:hadir/models/model_ordinate.dart';
 import 'package:hadir/models/response_default.dart';
 import 'package:location/location.dart';
 
+import '../app/helper/common.dart';
 import '../app/repository/remote/api_config.dart';
 import '../app/repository/repository.dart';
 import '../models/model_location.dart';
@@ -62,15 +63,20 @@ class GeotagController extends GetxController {
     }
   }
 
-  fetchLocation() async {
+  fetchLocation() {
     location.enableBackgroundMode(enable: true);
     location.onLocationChanged.listen((LocationData currentLocation) {
       ordinate.value = ModelOrdinate(
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
       );
+      _getAddress(currentLocation);
     });
     camZoom.value = 18;
+  }
+
+  _getAddress(LocationData? ord) async {
+    address.value = await MyCommon.getAddress(ord?.latitude, ord?.longitude);
   }
 
   initMarkerLocation() async {

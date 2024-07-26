@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hadir/app/helper/common.dart';
 import 'package:hadir/app/styles/color.dart';
 import 'package:hadir/models/model_location.dart';
 
@@ -18,13 +17,15 @@ class GeoTagPage extends StatefulWidget {
 
 class _GeoTagPage extends State<StatefulWidget> {
   final Completer<GoogleMapController> _mapController = Completer();
-  late GoogleMapController _controller;
+  GoogleMapController? _controller;
   late GeotagController _geotagCtrl;
-  var address = "";
   final defaultRadius = 50; //in meter
 
   @override
   void initState() {
+    _mapController.future.then((value) {
+      _controller = value;
+    });
     _geotagCtrl = Get.put(GeotagController());
     _geotagCtrl.enableService();
     _geotagCtrl.checkPermission();
@@ -35,7 +36,7 @@ class _GeoTagPage extends State<StatefulWidget> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -43,16 +44,8 @@ class _GeoTagPage extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     return Obx(() {
       final ord = _geotagCtrl.ordinate.value;
-      if (ord.latitude != null && ord.longitude != null) {
-        MyCommon.getAddress(ord.latitude!, ord.longitude!).then((adr) {
-          address = adr;
-        });
-      }
       _geotagCtrl.getMarkerLocation(false);
-      _mapController.future.then((value) {
-        _controller = value;
-        _controller.animateCamera(CameraUpdate.newCameraPosition(_geotagCtrl.getCameraPosition()));
-      });
+      _controller?.animateCamera(CameraUpdate.newCameraPosition(_geotagCtrl.getCameraPosition()));
 
       return Scaffold(
         body: Stack(
@@ -66,12 +59,14 @@ class _GeoTagPage extends State<StatefulWidget> {
               onMapCreated: (GoogleMapController controller) {
                 _mapController.complete(controller);
               },
+              compassEnabled: false,
               myLocationButtonEnabled: false,
               zoomControlsEnabled: false,
+              mapToolbarEnabled: false,
               markers: Set<Marker>.of(_geotagCtrl.markers.values),
             ),
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 62, horizontal: 12),
+              margin: const EdgeInsets.symmetric(vertical: 42, horizontal: 12),
               padding: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(32.0),
@@ -101,14 +96,14 @@ class _GeoTagPage extends State<StatefulWidget> {
                       child: Icon(Icons.save),
                     ),
                     onTap: () async {
-                      if (_geotagCtrl.name.value.value.text.isNotEmpty && address.isNotEmpty) {
+                      if (_geotagCtrl.name.value.value.text.isNotEmpty && _geotagCtrl.address.value.isNotEmpty) {
                         final response = await _geotagCtrl.newLocation(
                           ModelLocation(
                             name: _geotagCtrl.name.value.value.text,
                             latitude: ord.latitude.toString(),
                             longitude: ord.longitude.toString(),
                             radius: defaultRadius,
-                            address: address,
+                            address: _geotagCtrl.address.value,
                           ),
                         );
                         Get.snackbar(
@@ -154,7 +149,23 @@ class _GeoTagPage extends State<StatefulWidget> {
                 color: Colors.white70,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
-                  child: Text(address),
+                  child: Text(_geotagCtrl.address.value),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: !_mapController.isCompleted,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                alignment: Alignment.center,
+                color: Colors.white70,
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text("Memuat map..", style: TextStyle(height: 4)),
+                  ],
                 ),
               ),
             ),
