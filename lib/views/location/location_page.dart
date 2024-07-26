@@ -38,12 +38,13 @@ class _LocationPage extends State<LocationPage> {
                 padding: const EdgeInsets.all(12),
                 itemCount: _locationCtrl.locations.length,
                 itemBuilder: (context, index) {
+                  final item = _locationCtrl.locations.reversed.toList()[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Card(
                       child: ListTile(
-                        title: Text(_locationCtrl.locations[index].name),
-                        subtitle: Text(_locationCtrl.locations[index].address),
+                        title: Text(item.name),
+                        subtitle: Text(item.address),
                       ),
                     ),
                   );

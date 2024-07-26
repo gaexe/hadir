@@ -80,11 +80,19 @@ class GeotagController extends GetxController {
   }
 
   initMarkerLocation() async {
-    _iconLocation = await BitmapDescriptor.asset(const ImageConfiguration(), "assets/images/ic_pin_android.png");
+    _iconLocation = await BitmapDescriptor.asset(
+      const ImageConfiguration(),
+      "assets/images/ic_pin_android.png",
+      height: 52,
+    );
   }
 
   initMarkerIam() async {
-    _iconIam = await BitmapDescriptor.asset(const ImageConfiguration(), "assets/images/ic_my_position.png");
+    _iconIam = await BitmapDescriptor.asset(
+      const ImageConfiguration(),
+      "assets/images/ic_my_position.png",
+      height: 52,
+    );
   }
 
   runValidator() {

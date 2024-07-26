@@ -45,12 +45,13 @@ class _HomePage extends State<HomePage> {
                 padding: const EdgeInsets.all(12),
                 itemCount: _locationCtrl.attendance.length,
                 itemBuilder: (context, index) {
+                  final item = _locationCtrl.attendance.reversed.toList()[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Card(
                       child: ListTile(
-                        title: Text(_locationCtrl.attendance[index].name),
-                        subtitle: Text("${_locationCtrl.attendance[index].time}, ${_locationCtrl.attendance[index].address}"),
+                        title: Text(item.name),
+                        subtitle: Text("${item.time}, ${item.address}"),
                       ),
                     ),
                   );
