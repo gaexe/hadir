@@ -11,16 +11,18 @@ class LocationController extends GetxController {
   /// common
   final locations = <Location>[].obs;
   final attendance = <Location>[].obs;
+  final isLoadingLocation = true.obs;
+  final isLoadingAttendance = true.obs;
 
   fetchLocations() async {
-    final data = await _remote.getLocations();
-    locations.value = data;
-    locations.refresh();
+    isLoadingLocation.value = true;
+    locations.value = await _remote.getLocations();
+    isLoadingLocation.value = false;
   }
 
   fetchAttendance() async {
-    final data = await _remote.getAttendance();
-    attendance.value = data;
-    attendance.refresh();
+    isLoadingAttendance.value = true;
+    attendance.value = await _remote.getAttendance();
+    isLoadingAttendance.value = false;
   }
 }
